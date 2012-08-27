@@ -1,0 +1,314 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		16B31CB615E9C8FD00BB6446 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16B31CB515E9C8FD00BB6446 /* UIKit.framework */; };
+		16B31CB815E9C8FD00BB6446 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16B31CB715E9C8FD00BB6446 /* Foundation.framework */; };
+		16B31CBA15E9C8FD00BB6446 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16B31CB915E9C8FD00BB6446 /* CoreGraphics.framework */; };
+		16B31CC015E9C8FD00BB6446 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 16B31CBE15E9C8FD00BB6446 /* InfoPlist.strings */; };
+		16B31CC215E9C8FD00BB6446 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B31CC115E9C8FD00BB6446 /* main.m */; };
+		16B31CC615E9C8FD00BB6446 /* HierarchyAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B31CC515E9C8FD00BB6446 /* HierarchyAppDelegate.m */; };
+		16B31CC915E9C8FD00BB6446 /* HierarchyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B31CC815E9C8FD00BB6446 /* HierarchyViewController.m */; };
+		16B31CCC15E9C8FD00BB6446 /* HierarchyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 16B31CCA15E9C8FD00BB6446 /* HierarchyViewController.xib */; };
+		16B31CD315E9C96F00BB6446 /* hierarchy_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 16B31CD215E9C96F00BB6446 /* hierarchy_icon.png */; };
+		16B31CD515E9CB3800BB6446 /* gameCenterButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 16B31CD415E9CB3800BB6446 /* gameCenterButton.png */; };
+		16B31CD715E9CBF200BB6446 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16B31CD615E9CBF200BB6446 /* GameKit.framework */; };
+		16B31CDA15E9CCB400BB6446 /* GCTurnBasedMatchHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B31CD915E9CCB400BB6446 /* GCTurnBasedMatchHelper.m */; };
+		16B31CE015EA0B0300BB6446 /* paper.png in Resources */ = {isa = PBXBuildFile; fileRef = 16B31CDF15EA0B0300BB6446 /* paper.png */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		16B31CB115E9C8FD00BB6446 /* Hierarchy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hierarchy.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		16B31CB515E9C8FD00BB6446 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		16B31CB715E9C8FD00BB6446 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		16B31CB915E9C8FD00BB6446 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		16B31CBD15E9C8FD00BB6446 /* Hierarchy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Hierarchy-Info.plist"; sourceTree = "<group>"; };
+		16B31CBF15E9C8FD00BB6446 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		16B31CC115E9C8FD00BB6446 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		16B31CC315E9C8FD00BB6446 /* Hierarchy-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Hierarchy-Prefix.pch"; sourceTree = "<group>"; };
+		16B31CC415E9C8FD00BB6446 /* HierarchyAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HierarchyAppDelegate.h; sourceTree = "<group>"; };
+		16B31CC515E9C8FD00BB6446 /* HierarchyAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HierarchyAppDelegate.m; sourceTree = "<group>"; };
+		16B31CC715E9C8FD00BB6446 /* HierarchyViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HierarchyViewController.h; sourceTree = "<group>"; };
+		16B31CC815E9C8FD00BB6446 /* HierarchyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HierarchyViewController.m; sourceTree = "<group>"; };
+		16B31CCB15E9C8FD00BB6446 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/HierarchyViewController.xib; sourceTree = "<group>"; };
+		16B31CD215E9C96F00BB6446 /* hierarchy_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hierarchy_icon.png; sourceTree = "<group>"; };
+		16B31CD415E9CB3800BB6446 /* gameCenterButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gameCenterButton.png; sourceTree = "<group>"; };
+		16B31CD615E9CBF200BB6446 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		16B31CD815E9CCB400BB6446 /* GCTurnBasedMatchHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTurnBasedMatchHelper.h; path = ../GCTurnBasedMatchHelper.h; sourceTree = "<group>"; };
+		16B31CD915E9CCB400BB6446 /* GCTurnBasedMatchHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTurnBasedMatchHelper.m; path = ../GCTurnBasedMatchHelper.m; sourceTree = "<group>"; };
+		16B31CDF15EA0B0300BB6446 /* paper.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = paper.png; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		16B31CAE15E9C8FD00BB6446 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16B31CD715E9CBF200BB6446 /* GameKit.framework in Frameworks */,
+				16B31CB615E9C8FD00BB6446 /* UIKit.framework in Frameworks */,
+				16B31CB815E9C8FD00BB6446 /* Foundation.framework in Frameworks */,
+				16B31CBA15E9C8FD00BB6446 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		16B31CA615E9C8FC00BB6446 = {
+			isa = PBXGroup;
+			children = (
+				16B31CD215E9C96F00BB6446 /* hierarchy_icon.png */,
+				16B31CBB15E9C8FD00BB6446 /* Hierarchy */,
+				16B31CB415E9C8FD00BB6446 /* Frameworks */,
+				16B31CB215E9C8FD00BB6446 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		16B31CB215E9C8FD00BB6446 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				16B31CB115E9C8FD00BB6446 /* Hierarchy.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		16B31CB415E9C8FD00BB6446 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				16B31CD615E9CBF200BB6446 /* GameKit.framework */,
+				16B31CB515E9C8FD00BB6446 /* UIKit.framework */,
+				16B31CB715E9C8FD00BB6446 /* Foundation.framework */,
+				16B31CB915E9C8FD00BB6446 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		16B31CBB15E9C8FD00BB6446 /* Hierarchy */ = {
+			isa = PBXGroup;
+			children = (
+				16B31CDF15EA0B0300BB6446 /* paper.png */,
+				16B31CD415E9CB3800BB6446 /* gameCenterButton.png */,
+				16B31CC415E9C8FD00BB6446 /* HierarchyAppDelegate.h */,
+				16B31CC515E9C8FD00BB6446 /* HierarchyAppDelegate.m */,
+				16B31CC715E9C8FD00BB6446 /* HierarchyViewController.h */,
+				16B31CC815E9C8FD00BB6446 /* HierarchyViewController.m */,
+				16B31CCA15E9C8FD00BB6446 /* HierarchyViewController.xib */,
+				16B31CD815E9CCB400BB6446 /* GCTurnBasedMatchHelper.h */,
+				16B31CD915E9CCB400BB6446 /* GCTurnBasedMatchHelper.m */,
+				16B31CBC15E9C8FD00BB6446 /* Supporting Files */,
+			);
+			path = Hierarchy;
+			sourceTree = "<group>";
+		};
+		16B31CBC15E9C8FD00BB6446 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				16B31CBD15E9C8FD00BB6446 /* Hierarchy-Info.plist */,
+				16B31CBE15E9C8FD00BB6446 /* InfoPlist.strings */,
+				16B31CC115E9C8FD00BB6446 /* main.m */,
+				16B31CC315E9C8FD00BB6446 /* Hierarchy-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		16B31CB015E9C8FD00BB6446 /* Hierarchy */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 16B31CCF15E9C8FD00BB6446 /* Build configuration list for PBXNativeTarget "Hierarchy" */;
+			buildPhases = (
+				16B31CAD15E9C8FD00BB6446 /* Sources */,
+				16B31CAE15E9C8FD00BB6446 /* Frameworks */,
+				16B31CAF15E9C8FD00BB6446 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Hierarchy;
+			productName = Hierarchy;
+			productReference = 16B31CB115E9C8FD00BB6446 /* Hierarchy.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		16B31CA815E9C8FC00BB6446 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = Hierarchy;
+				LastUpgradeCheck = 0440;
+				ORGANIZATIONNAME = "Kris Fields";
+			};
+			buildConfigurationList = 16B31CAB15E9C8FC00BB6446 /* Build configuration list for PBXProject "Hierarchy" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 16B31CA615E9C8FC00BB6446;
+			productRefGroup = 16B31CB215E9C8FD00BB6446 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				16B31CB015E9C8FD00BB6446 /* Hierarchy */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		16B31CAF15E9C8FD00BB6446 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16B31CC015E9C8FD00BB6446 /* InfoPlist.strings in Resources */,
+				16B31CCC15E9C8FD00BB6446 /* HierarchyViewController.xib in Resources */,
+				16B31CD315E9C96F00BB6446 /* hierarchy_icon.png in Resources */,
+				16B31CD515E9CB3800BB6446 /* gameCenterButton.png in Resources */,
+				16B31CE015EA0B0300BB6446 /* paper.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		16B31CAD15E9C8FD00BB6446 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16B31CC215E9C8FD00BB6446 /* main.m in Sources */,
+				16B31CC615E9C8FD00BB6446 /* HierarchyAppDelegate.m in Sources */,
+				16B31CC915E9C8FD00BB6446 /* HierarchyViewController.m in Sources */,
+				16B31CDA15E9CCB400BB6446 /* GCTurnBasedMatchHelper.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		16B31CBE15E9C8FD00BB6446 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				16B31CBF15E9C8FD00BB6446 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		16B31CCA15E9C8FD00BB6446 /* HierarchyViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				16B31CCB15E9C8FD00BB6446 /* en */,
+			);
+			name = HierarchyViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		16B31CCD15E9C8FD00BB6446 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		16B31CCE15E9C8FD00BB6446 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		16B31CD015E9C8FD00BB6446 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Hierarchy/Hierarchy-Prefix.pch";
+				INFOPLIST_FILE = "Hierarchy/Hierarchy-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		16B31CD115E9C8FD00BB6446 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Hierarchy/Hierarchy-Prefix.pch";
+				INFOPLIST_FILE = "Hierarchy/Hierarchy-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		16B31CAB15E9C8FC00BB6446 /* Build configuration list for PBXProject "Hierarchy" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				16B31CCD15E9C8FD00BB6446 /* Debug */,
+				16B31CCE15E9C8FD00BB6446 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		16B31CCF15E9C8FD00BB6446 /* Build configuration list for PBXNativeTarget "Hierarchy" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				16B31CD015E9C8FD00BB6446 /* Debug */,
+				16B31CD115E9C8FD00BB6446 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 16B31CA815E9C8FC00BB6446 /* Project object */;
+}
