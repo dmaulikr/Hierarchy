@@ -16,6 +16,8 @@
 - (void)recieveEndGame:(GKTurnBasedMatch *)match;
 - (void)sendNotice:(NSString *)notice
           forMatch:(GKTurnBasedMatch *)match;
+- (void)firstRound;
+- (void)newRound;
 @end
 
 @interface GCTurnBasedMatchHelper : NSObject
@@ -25,10 +27,10 @@
     UIViewController *presentingViewController;
     
     GKTurnBasedMatch *currentMatch;
-    
+
     id <GCTurnBasedMatchHelperDelegate> delegate;
 }
-
+@property (strong, nonatomic) NSMutableArray *playerOrder;
 @property (nonatomic, retain)
 id <GCTurnBasedMatchHelperDelegate> delegate;
 @property (assign, readonly) BOOL gameCenterAvailable;

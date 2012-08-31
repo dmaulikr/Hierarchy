@@ -9,18 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "GCTurnBasedMatchHelper.h"
 
-@interface HierarchyViewController : UIViewController <UITextFieldDelegate, GCTurnBasedMatchHelperDelegate> {
+@interface HierarchyViewController : UIViewController <UITextFieldDelegate, GCTurnBasedMatchHelperDelegate, UITableViewDataSource, UITableViewDelegate> {
     
     __weak IBOutlet UILabel *statusLabel;
-    IBOutlet UITextView *mainTextController;
-    IBOutlet UIView *inputView;
     IBOutlet UITextField *textInputField;
-    IBOutlet UILabel *characterCountLabel;
+    
 }
+@property (weak, nonatomic) IBOutlet UITableView *playersToKill;
 
-- (IBAction)sendTurn:(id)sender;
 
 - (IBAction)presentGCTurnViewController:(id)sender;
 - (void) animateTextField: (UITextField*) textField up: (BOOL) up;
-- (IBAction)updateCount:(id)sender;
 @end

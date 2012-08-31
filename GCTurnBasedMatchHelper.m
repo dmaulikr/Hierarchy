@@ -145,17 +145,21 @@ static GCTurnBasedMatchHelper *sharedHelper = nil;
     self.currentMatch = match;
     GKTurnBasedParticipant *firstParticipant =
     [match.participants objectAtIndex:0];
-    if (firstParticipant.lastTurnDate == NULL) {
-        // It's a new game!
-        [delegate enterNewGame:match];
-    } else {
-        if ([match.currentParticipant.playerID
-             isEqualToString:[GKLocalPlayer localPlayer].playerID]) {
-            // It's your turn!
-            [delegate takeTurn:match];
+    if (match.currentParticipant.lastTurnDate == NULL) {
+        [delegate firstRound];
+    }else {
+        if (firstParticipant.lastTurnDate == NULL) {
+            // It's a new game!  Currently will NEVER be called because firstRound will be called instead. Leaving it here because it might be useful in other games.
+            [delegate enterNewGame:match];
         } else {
-            // It's not your turn, just display the game state.
-            [delegate layoutMatch:match];
+            if ([match.currentParticipant.playerID
+                 isEqualToString:[GKLocalPlayer localPlayer].playerID]) {
+                // It's your turn!
+                [delegate takeTurn:match];
+            } else {
+                // It's not your turn, just display the game state.
+                [delegate layoutMatch:match];
+            }
         }
     }
 }
@@ -205,7 +209,7 @@ static GCTurnBasedMatchHelper *sharedHelper = nil;
     GKMatchRequest *request =
     [[GKMatchRequest alloc] init];
     request.playersToInvite = playersToInvite;
-    request.maxPlayers = 12;
+    request.maxPlayers = 16;
     request.minPlayers = 2;
     GKTurnBasedMatchmakerViewController *viewController =
     [[GKTurnBasedMatchmakerViewController alloc]
@@ -218,6 +222,8 @@ static GCTurnBasedMatchHelper *sharedHelper = nil;
 
 -(void)handleTurnEventForMatch:(GKTurnBasedMatch *)match {
     NSLog(@"Turn has happened");
+    [delegate newRound];
+
     if ([match.matchID isEqualToString:currentMatch.matchID]) {
         if ([match.currentParticipant.playerID
              isEqualToString:[GKLocalPlayer localPlayer].playerID]) {
