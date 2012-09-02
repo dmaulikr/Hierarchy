@@ -176,7 +176,6 @@
     if ([self getPlayerIDOrderOutOfMatchData]) {
         self.playerOrder = [self getPlayerIDOrderOutOfMatchData];
     }
-
     [self.playerOrder addObject:self.currentMatch.currentParticipant.playerID];
 }
 
@@ -205,7 +204,7 @@
             self.playersToKill.hidden = NO;
             self.playersToKill.alpha = 0.2;
             [self.playersToKill reloadData];
-            statusLabel.text = [NSString stringWithFormat:@"Welcome %@.  Game Will Begin Momentarily.", self.name ];
+            statusLabel.text = [NSString stringWithFormat:@"Welcome %@.  Game Will Begin When All Players Have Joined.", self.name ];
             textInputField.enabled = NO;
             textInputField.hidden = YES;
             [self.playersToKill reloadData];
@@ -227,6 +226,7 @@
 
 //enable table, set voteWasCast to NO.
 -(void)takeTurn:(GKTurnBasedMatch *)match {
+    self.currentMatch = [[GCTurnBasedMatchHelper sharedInstance] currentMatch];
     [self newRound];
     [self.playersToKill reloadData];
 }
@@ -277,7 +277,7 @@
 -(void)newRound
 {
     self.playerOrder = [self getPlayerIDOrderOutOfMatchData];
-    self.currentMatch = [[GCTurnBasedMatchHelper sharedInstance] currentMatch]; //not sure if i need this line... why is currentParticipant.playerID null at this point??  ah...current participant is the other player, and his turn hasn't 100% ended yet... maybe that makes sense...but shouldn't he have a playerID immediately upon first turn?  we use it and don't get yelled at... don't we?
+    //not sure if i need this line... why is currentParticipant.playerID null at this point??  ah...current participant is the other player, and his turn hasn't 100% ended yet... maybe that makes sense...but shouldn't he have a playerID immediately upon first turn?  we use it and don't get yelled at... don't we?
     if ([self isItANewRound]) {
         NSLog(@"It's a new round!");
     }
