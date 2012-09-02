@@ -17,6 +17,8 @@
 @property (strong, nonatomic) NSNumber *votes;
 @property (strong, nonatomic) NSNumber *strikes;
 @property (strong, nonatomic) NSMutableDictionary *playerInfo;
+@property (strong, nonatomic) NSMutableArray *playerOrder;
+@property (strong, nonatomic) GKTurnBasedMatch *currentMatch;
 @end
 
 @implementation HierarchyViewController
@@ -72,80 +74,130 @@
 }
 - (BOOL)textFieldShouldReturn:(UITextField *)theTextField {
     [theTextField resignFirstResponder];
-    [self sendTurn];
+    [self firstTurn];
     return YES;
 }
 
 -(NSMutableArray *)getPlayerOrderOutOfMatchData
 {
-    GKTurnBasedMatch *currentMatch = [[GCTurnBasedMatchHelper sharedInstance] currentMatch];
-    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:currentMatch.matchData];
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:self.currentMatch.matchData];
+    NSMutableArray *unarchivedArray = [unarchiver decodeObjectForKey: @"playerOrder"];
+    [unarchiver finishDecoding];
+    NSMutableArray *participantOrder = [[NSMutableArray alloc]init];
+    for (NSString* playerID in unarchivedArray){
+        //get participant from currentMatch and add to participantOrder array
+        for (GKTurnBasedParticipant *participant in self.currentMatch.participants){
+            if ([participant.playerID isEqualToString:playerID]) {
+                [participantOrder addObject:participant];
+                break;
+            }
+        }
+    }
+    return participantOrder;
+}
+-(NSMutableArray *)getPlayerIDOrderOutOfMatchData
+{
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:self.currentMatch.matchData];
     NSMutableArray *unarchivedArray = [unarchiver decodeObjectForKey: @"playerOrder"];
     [unarchiver finishDecoding];
     return unarchivedArray;
 }
 -(NSMutableDictionary *)getPlayerInfoOutOfMatchData:(NSString *)playerID
 {
-    GKTurnBasedMatch *currentMatch = [[GCTurnBasedMatchHelper sharedInstance] currentMatch];
-    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:currentMatch.matchData];
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:self.currentMatch.matchData];
     NSMutableDictionary *unarchivedDictionary = [unarchiver decodeObjectForKey:playerID];
     [unarchiver finishDecoding];
     return unarchivedDictionary;
 }
+-(int)getPreviousPlayerIndexOutOfMatchData
+{
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:self.currentMatch.matchData];
+    NSNumber *previousPlayerIndex = [unarchiver decodeObjectForKey:@"previousPlayerIndex"];
+    [unarchiver finishDecoding];
+    return [previousPlayerIndex intValue];
+}
 -(NSMutableData *)putPlayerInfoIntoMatchData
 {
-    GKTurnBasedMatch *currentMatch = [[GCTurnBasedMatchHelper sharedInstance] currentMatch];
-    GCTurnBasedMatchHelper *currentMatchInfo = [GCTurnBasedMatchHelper sharedInstance];
     NSMutableData *data = [[NSMutableData alloc] init];
     NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
-    [archiver encodeObject:currentMatchInfo.playerOrder forKey:@"playerOrder"];
-    [archiver encodeObject:self.playerInfo forKey:currentMatch.currentParticipant.playerID];
+    [archiver encodeObject:self.playerOrder forKey:@"playerOrder"];
+    NSNumber *previousPlayerIndex = [NSNumber numberWithDouble:[self.currentMatch.participants indexOfObject:self.currentMatch.currentParticipant]];
+    [archiver encodeObject:previousPlayerIndex forKey:@"previousPlayerIndex"];
+    for (NSString *playerID in self.playerOrder){
+        if ([playerID isEqualToString:self.currentMatch.currentParticipant.playerID]) {
+            [archiver encodeObject:self.playerInfo forKey:self.currentMatch.currentParticipant.playerID];
+        } else {
+            NSMutableDictionary *playerInfo = [self getPlayerInfoOutOfMatchData:playerID];
+            [archiver encodeObject:playerInfo forKey:playerID];
+        }
+    }
     [archiver finishEncoding];
     return data;
 }
 -(GKTurnBasedParticipant *)findNextParticipant
 {
-    GKTurnBasedMatch *currentMatch = [[GCTurnBasedMatchHelper sharedInstance] currentMatch];
-    GCTurnBasedMatchHelper *currentMatchInfo = [GCTurnBasedMatchHelper sharedInstance];
-    NSUInteger currentIndex = [currentMatchInfo.playerOrder indexOfObject:currentMatch.currentParticipant];
+    NSUInteger currentIndex = [self.playerOrder indexOfObject:self.currentMatch.currentParticipant.playerID];
+    NSString *nextParticipantID;
     GKTurnBasedParticipant *nextParticipant;
+    nextParticipant = self.currentMatch.currentParticipant;
     
-    NSUInteger nextIndex = (currentIndex + 1) % [currentMatchInfo.playerOrder count];
-    nextParticipant = [currentMatchInfo.playerOrder objectAtIndex:nextIndex];
+    NSUInteger nextIndex = (currentIndex + 1) % [self.playerOrder count];
+    nextParticipantID = [self.playerOrder objectAtIndex:nextIndex];
     
 
-    for (int i = 0; i < [currentMatchInfo.playerOrder count]; i++) {
-        nextParticipant = [currentMatchInfo.playerOrder objectAtIndex:((currentIndex + 1 + i) % [currentMatchInfo.playerOrder count ])];
-        if (nextParticipant.matchOutcome != GKTurnBasedMatchOutcomeQuit) {
-            //            NSLog(@"isnt' quit %@", nextParticipant);
-            break;
-        } else {
-            //            NSLog(@"nex part %@", nextParticipant);
+    //loop through playerIDs in the correct player order.  For each, grab their player ID, then do a for loop to grab the corresponding GKTurnBasedParticipant object.  Then check if that participant hasn't lost and hasn't quit.  If that's the case, they're the next participant.
+    for (int i = 0; i < [self.playerOrder count]; i++) {
+        nextParticipantID = [self.playerOrder objectAtIndex:((currentIndex + 1 + i) % [self.playerOrder count ])];
+        for (GKTurnBasedParticipant *participant in self.currentMatch.participants) {
+            if ([participant.playerID isEqualToString:nextParticipantID]) {
+                if (participant.matchOutcome != GKTurnBasedMatchOutcomeQuit && participant.matchOutcome != GKTurnBasedMatchOutcomeLost) {
+                    nextParticipant = participant;
+                    break;
+                }
+            }
         }
     }
     return nextParticipant;
 }
+- (GKTurnBasedParticipant *)findNextParticipantFirstRound {
+    NSUInteger currentIndex = [self.currentMatch.participants indexOfObject:self.currentMatch.currentParticipant];
+    GKTurnBasedParticipant *nextParticipant;
+    
+     for (int i = 0; i < [self.currentMatch.participants count]; i++) {
+        nextParticipant = [self.currentMatch.participants objectAtIndex:((currentIndex + 1 + i) % [self.currentMatch.participants count ])];
+        if (nextParticipant.matchOutcome != GKTurnBasedMatchOutcomeQuit) {
+            break;
+        }
+    }
+    return nextParticipant;
+}
+
+- (void)createPlayerOrderFirstRound {
+    if ([self getPlayerIDOrderOutOfMatchData]) {
+        self.playerOrder = [self getPlayerIDOrderOutOfMatchData];
+    }
+
+    [self.playerOrder addObject:self.currentMatch.currentParticipant.playerID];
+}
+
 //gets user's name and that's it.  get nsdata object from match, add new dictionary to it for current user, including name key.  hide textField after name is received.
-- (void)sendTurn {
+- (void)firstTurn {
     if ([textInputField.text isEqualToString:@""] || [textInputField.text length] > 25) {
         statusLabel.text = @"No, Seriously... Enter Your  Fucking Name.";
         return;
     }
     self.name = textInputField.text;
     self.playerInfo = [NSMutableDictionary dictionaryWithDictionary:@{ @"name" : self.name, @"votes" : self.votes, @"strikes" : self.strikes }];
-    
-    GKTurnBasedMatch *currentMatch = [[GCTurnBasedMatchHelper sharedInstance] currentMatch];
-    GCTurnBasedMatchHelper *currentMatchInfo = [GCTurnBasedMatchHelper sharedInstance];
-    currentMatchInfo.playerOrder = [NSMutableArray arrayWithArray:currentMatch.participants];
+    [self createPlayerOrderFirstRound];
     
     NSMutableData *data = [self putPlayerInfoIntoMatchData];
     
-    GKTurnBasedParticipant *nextParticipant = [self findNextParticipant];
-    NSLog(@"MATCH ID = %@", currentMatch.matchID);
-    NSLog(@"player order = %@", currentMatchInfo.playerOrder);
-    NSLog(@"current participant:%@", currentMatch.currentParticipant);
+    GKTurnBasedParticipant *nextParticipant = [self findNextParticipantFirstRound];
+    NSLog(@"MATCH ID = %@", self.currentMatch.matchID);
+    NSLog(@"current participant = %@", self.currentMatch.currentParticipant);
     NSLog(@"next participant:%@", nextParticipant);
-    [currentMatch endTurnWithNextParticipant:nextParticipant matchData:data completionHandler:^(NSError *error) {
+    NSLog(@"player order by ID = %@", self.playerOrder);
+    [self.currentMatch endTurnWithNextParticipant:nextParticipant matchData:data completionHandler:^(NSError *error) {
         if (error) {
             NSLog(@"%@", error);
             statusLabel.text = @"No, Seriously... Enter Your  Fucking Name.";
@@ -175,7 +227,8 @@
 
 //enable table, set voteWasCast to NO.
 -(void)takeTurn:(GKTurnBasedMatch *)match {
-
+    [self newRound];
+    [self.playersToKill reloadData];
 }
 
 //display table.  disable clicking on table cells.  Match where it is not user's turn!
@@ -206,17 +259,31 @@
     textInputField.enabled = YES;
     textInputField.hidden = NO;
     statusLabel.text = @"Please enter your name.";
-    GCTurnBasedMatchHelper *currentMatchInfo = [GCTurnBasedMatchHelper sharedInstance];
-    currentMatchInfo.playerOrder = [[NSMutableArray alloc]init];
+    self.playerOrder = [[NSMutableArray alloc]init];
     self.playerInfo = [[NSMutableDictionary alloc]init];
     self.votes = [NSNumber numberWithInt:1];
     self.strikes = [NSNumber numberWithInt:0];
+    self.currentMatch = [[GCTurnBasedMatchHelper sharedInstance] currentMatch];
 
 }
 //First, see if new round has started.  Do so by comparing index of currentParticpant in sortedPlayers vs index of previous Player in sortedPlayers.  Then re-sort based on number of votes.  And update round number.
+-(BOOL)isItANewRound
+{
+    if ([self.playerOrder indexOfObject:self.currentMatch.currentParticipant.playerID] < [self getPreviousPlayerIndexOutOfMatchData]) {
+        return YES;
+    }
+    return NO;
+}
 -(void)newRound
 {
-    
+    self.playerOrder = [self getPlayerIDOrderOutOfMatchData];
+    self.currentMatch = [[GCTurnBasedMatchHelper sharedInstance] currentMatch]; //not sure if i need this line... why is currentParticipant.playerID null at this point??  ah...current participant is the other player, and his turn hasn't 100% ended yet... maybe that makes sense...but shouldn't he have a playerID immediately upon first turn?  we use it and don't get yelled at... don't we?
+    if ([self isItANewRound]) {
+        NSLog(@"It's a new round!");
+    }
+    else {
+        NSLog(@"It's not a new round");
+    }
 }
 
 
@@ -228,17 +295,14 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    GCTurnBasedMatchHelper *currentMatchInfo = [GCTurnBasedMatchHelper sharedInstance];
-    return [currentMatchInfo.playerOrder count];
+    return [self.playerOrder count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Cell"];
-//    GCTurnBasedMatchHelper *currentMatchInfo = [GCTurnBasedMatchHelper sharedInstance];
-    GKTurnBasedParticipant *currentPlayer = [[self getPlayerOrderOutOfMatchData] objectAtIndex:[indexPath row]];
-    NSString *currentPlayerID = currentPlayer.playerID;
-    NSMutableDictionary *playerInfo = [self getPlayerInfoOutOfMatchData:currentPlayerID];
+    NSString *playerID = [self.playerOrder objectAtIndex:[indexPath row]];
+    NSMutableDictionary *playerInfo = [self getPlayerInfoOutOfMatchData:playerID];
     cell.textLabel.text = [playerInfo objectForKey:@"name"];
     cell.detailTextLabel.text = [NSString stringWithFormat:@"Votes to Cast: %@, Votes Against: %@", [playerInfo objectForKey:@"votes"], [playerInfo objectForKey:@"strikes"]];
     return cell;

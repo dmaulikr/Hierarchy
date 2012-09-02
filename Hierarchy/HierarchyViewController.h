@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "GCTurnBasedMatchHelper.h"
 
-@interface HierarchyViewController : UIViewController <UITextFieldDelegate, GCTurnBasedMatchHelperDelegate, UITableViewDataSource, UITableViewDelegate> {
+@interface HierarchyViewController : UIViewController <UITextFieldDelegate, GCTurnBasedMatchHelperDelegate, UITableViewDataSource, UITableViewDelegate>
+{
     
     __weak IBOutlet UILabel *statusLabel;
     IBOutlet UITextField *textInputField;
@@ -19,5 +20,4 @@
 
 
 - (IBAction)presentGCTurnViewController:(id)sender;
-- (void) animateTextField: (UITextField*) textField up: (BOOL) up;
 @end

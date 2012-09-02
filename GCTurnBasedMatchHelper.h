@@ -30,7 +30,7 @@
 
     id <GCTurnBasedMatchHelperDelegate> delegate;
 }
-@property (strong, nonatomic) NSMutableArray *playerOrder;
+
 @property (nonatomic, retain)
 id <GCTurnBasedMatchHelperDelegate> delegate;
 @property (assign, readonly) BOOL gameCenterAvailable;

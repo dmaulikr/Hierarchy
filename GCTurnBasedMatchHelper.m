@@ -222,7 +222,7 @@ static GCTurnBasedMatchHelper *sharedHelper = nil;
 
 -(void)handleTurnEventForMatch:(GKTurnBasedMatch *)match {
     NSLog(@"Turn has happened");
-    [delegate newRound];
+//    [delegate newRound];
 
     if ([match.matchID isEqualToString:currentMatch.matchID]) {
         if ([match.currentParticipant.playerID
