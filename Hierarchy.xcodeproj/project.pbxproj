@@ -20,6 +20,7 @@
 		16B31CD715E9CBF200BB6446 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16B31CD615E9CBF200BB6446 /* GameKit.framework */; };
 		16B31CDA15E9CCB400BB6446 /* GCTurnBasedMatchHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B31CD915E9CCB400BB6446 /* GCTurnBasedMatchHelper.m */; };
 		16B31CE015EA0B0300BB6446 /* paper.png in Resources */ = {isa = PBXBuildFile; fileRef = 16B31CDF15EA0B0300BB6446 /* paper.png */; };
+		16F1657215F5C3E800F78BBC /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 16F1657115F5C3E800F78BBC /* Player.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,8 @@
 		16B31CD815E9CCB400BB6446 /* GCTurnBasedMatchHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTurnBasedMatchHelper.h; path = ../GCTurnBasedMatchHelper.h; sourceTree = "<group>"; };
 		16B31CD915E9CCB400BB6446 /* GCTurnBasedMatchHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTurnBasedMatchHelper.m; path = ../GCTurnBasedMatchHelper.m; sourceTree = "<group>"; };
 		16B31CDF15EA0B0300BB6446 /* paper.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = paper.png; sourceTree = "<group>"; };
+		16F1657015F5C3E800F78BBC /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
+		16F1657115F5C3E800F78BBC /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Player.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +100,8 @@
 				16B31CC515E9C8FD00BB6446 /* HierarchyAppDelegate.m */,
 				16B31CC715E9C8FD00BB6446 /* HierarchyViewController.h */,
 				16B31CC815E9C8FD00BB6446 /* HierarchyViewController.m */,
+				16F1657015F5C3E800F78BBC /* Player.h */,
+				16F1657115F5C3E800F78BBC /* Player.m */,
 				16B31CCA15E9C8FD00BB6446 /* HierarchyViewController.xib */,
 				16B31CD815E9CCB400BB6446 /* GCTurnBasedMatchHelper.h */,
 				16B31CD915E9CCB400BB6446 /* GCTurnBasedMatchHelper.m */,
@@ -187,6 +192,7 @@
 				16B31CC615E9C8FD00BB6446 /* HierarchyAppDelegate.m in Sources */,
 				16B31CC915E9C8FD00BB6446 /* HierarchyViewController.m in Sources */,
 				16B31CDA15E9CCB400BB6446 /* GCTurnBasedMatchHelper.m in Sources */,
+				16F1657215F5C3E800F78BBC /* Player.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -6,12 +6,18 @@
 //  Copyright (c) 2012 Kris Fields. All rights reserved.
 //
 
+//create game state class, player class
+//let matchHelper determine next player
+//let matchHelper determine first round
+
 #import "HierarchyViewController.h"
+#import "Player.h"
 
 @interface HierarchyViewController ()
 {
 
 }
+@property (strong, nonatomic) NSMutableArray *players;
 
 @property (strong, nonatomic) NSString* name;
 @property (strong, nonatomic) NSNumber *votes;
@@ -19,6 +25,7 @@
 @property (strong, nonatomic) NSMutableDictionary *playerInfo;
 @property (strong, nonatomic) NSMutableArray *playerOrder;
 @property (strong, nonatomic) GKTurnBasedMatch *currentMatch;
+@property (nonatomic) BOOL isTableEditable;
 @end
 
 @implementation HierarchyViewController
@@ -46,27 +53,6 @@
     [self setPlayersToKill:nil];
     [super viewDidUnload];
 }
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-	[super viewWillDisappear:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-	[super viewDidDisappear:animated];
-}
-
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -116,7 +102,14 @@
     [unarchiver finishDecoding];
     return [previousPlayerIndex intValue];
 }
--(NSMutableData *)putPlayerInfoIntoMatchData
+-(void)putIndividualPlayerInfoIntoMatchData:(NSMutableDictionary *)selectedPlayer withPlayerID:(NSString *)playerID
+{
+    NSMutableData *data = [[NSMutableData alloc] init];
+    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+    [archiver encodeObject:selectedPlayer forKey:playerID];
+    [archiver finishEncoding];
+}
+-(NSMutableData *)putPlayerInfoIntoMatchData:(NSMutableDictionary *)selectedPlayer withPlayerID:(NSString *)selectedPlayerID
 {
     NSMutableData *data = [[NSMutableData alloc] init];
     NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
@@ -126,6 +119,8 @@
     for (NSString *playerID in self.playerOrder){
         if ([playerID isEqualToString:self.currentMatch.currentParticipant.playerID]) {
             [archiver encodeObject:self.playerInfo forKey:self.currentMatch.currentParticipant.playerID];
+        } else if ([playerID isEqualToString:selectedPlayerID]){
+            [archiver encodeObject:selectedPlayer forKey:selectedPlayerID];
         } else {
             NSMutableDictionary *playerInfo = [self getPlayerInfoOutOfMatchData:playerID];
             [archiver encodeObject:playerInfo forKey:playerID];
@@ -152,11 +147,12 @@
             if ([participant.playerID isEqualToString:nextParticipantID]) {
                 if (participant.matchOutcome != GKTurnBasedMatchOutcomeQuit && participant.matchOutcome != GKTurnBasedMatchOutcomeLost) {
                     nextParticipant = participant;
-                    break;
+                    goto outer;
                 }
             }
         }
     }
+    outer:;
     return nextParticipant;
 }
 - (GKTurnBasedParticipant *)findNextParticipantFirstRound {
@@ -189,7 +185,23 @@
     self.playerInfo = [NSMutableDictionary dictionaryWithDictionary:@{ @"name" : self.name, @"votes" : self.votes, @"strikes" : self.strikes }];
     [self createPlayerOrderFirstRound];
     
-    NSMutableData *data = [self putPlayerInfoIntoMatchData];
+    //loop through participants.  if they have a playerID, create a player instance.
+    for (GKTurnBasedParticipant *participant in self.currentMatch.participants) {
+        NSString *playerName;
+        if (participant.playerID) {
+            if ([participant.playerID isEqualToString:self.currentMatch.currentParticipant.playerID]) {
+                playerName = textInputField.text;
+            } else {
+                NSMutableDictionary *playerInfo = [self getPlayerInfoOutOfMatchData:participant.playerID];
+                playerName = [playerInfo objectForKey:@"name"];
+            }
+            Player *player = [[Player alloc] initWithName:playerName];
+            player.playerID = participant.playerID;
+            [self.players addObject:player];
+        }
+    }
+    
+    NSMutableData *data = [self putPlayerInfoIntoMatchData:nil withPlayerID:nil];
     
     GKTurnBasedParticipant *nextParticipant = [self findNextParticipantFirstRound];
     NSLog(@"MATCH ID = %@", self.currentMatch.matchID);
@@ -219,6 +231,18 @@
 
 #pragma mark - GCTurnBasedMatchHelperDelegate
 
+//will only work if currentParticipant has a playerID, and has already submitted their name.  Otherwise, maybe loop through all participants, and for those that have a playerID, check if they have a Player object by trying to obtain it.  if not, create one.
+- (void)layoutMatchFirstRound:(GKTurnBasedMatch *)match {
+    self.currentMatch = [[GCTurnBasedMatchHelper sharedInstance] currentMatch];
+    NSMutableDictionary *playerInfo = [self getPlayerInfoOutOfMatchData:self.currentMatch.currentParticipant.playerID];
+    NSString *playerName = [playerInfo objectForKey:@"name"];
+    Player *player = [[Player alloc]initWithName:playerName];
+    player.playerID = self.currentMatch.currentParticipant.playerID;
+    [self.players addObject:player];
+    NSLog(@"Players = %@", self.players);
+    [self.playersToKill reloadData];
+}
+
 //NEVER going to be called.  Will be deleted soon...hide table.  show textfield and submit button.
 -(void)enterNewGame:(GKTurnBasedMatch *)match {
 
@@ -226,14 +250,23 @@
 
 //enable table, set voteWasCast to NO.
 -(void)takeTurn:(GKTurnBasedMatch *)match {
+    //maybe call layOutMatch to consolidate code, followed by making table editable.
     self.currentMatch = [[GCTurnBasedMatchHelper sharedInstance] currentMatch];
     [self newRound];
+    self.isTableEditable = YES;
+    self.playersToKill.alpha = 1.0;
     [self.playersToKill reloadData];
+    //must update current playerInfo
+    self.playerInfo = [self getPlayerInfoOutOfMatchData:self.currentMatch.currentParticipant.playerID];
+    self.strikes = [self.playerInfo objectForKey:@"strikes"];
+
 }
 
 //display table.  disable clicking on table cells.  Match where it is not user's turn!
 -(void)layoutMatch:(GKTurnBasedMatch *)match {
-
+    self.currentMatch = [[GCTurnBasedMatchHelper sharedInstance] currentMatch];
+    [self newRound];
+    [self.playersToKill reloadData];
 }
 
 
@@ -258,6 +291,7 @@
 {
     textInputField.enabled = YES;
     textInputField.hidden = NO;
+    self.isTableEditable = NO;
     statusLabel.text = @"Please enter your name.";
     self.playerOrder = [[NSMutableArray alloc]init];
     self.playerInfo = [[NSMutableDictionary alloc]init];
@@ -277,9 +311,13 @@
 -(void)newRound
 {
     self.playerOrder = [self getPlayerIDOrderOutOfMatchData];
-    //not sure if i need this line... why is currentParticipant.playerID null at this point??  ah...current participant is the other player, and his turn hasn't 100% ended yet... maybe that makes sense...but shouldn't he have a playerID immediately upon first turn?  we use it and don't get yelled at... don't we?
+
     if ([self isItANewRound]) {
         NSLog(@"It's a new round!");
+        //give each players votes equal to strikes +1.
+        //reorder playerOrder based on votes
+        
+        //redraw table
     }
     else {
         NSLog(@"It's not a new round");
@@ -304,7 +342,11 @@
     NSString *playerID = [self.playerOrder objectAtIndex:[indexPath row]];
     NSMutableDictionary *playerInfo = [self getPlayerInfoOutOfMatchData:playerID];
     cell.textLabel.text = [playerInfo objectForKey:@"name"];
+    NSLog(@"strikes for player %@ when table is being redrawn = %@", [playerInfo objectForKey:@"name"], [playerInfo objectForKey:@"strikes"]);
     cell.detailTextLabel.text = [NSString stringWithFormat:@"Votes to Cast: %@, Votes Against: %@", [playerInfo objectForKey:@"votes"], [playerInfo objectForKey:@"strikes"]];
+    if (!self.isTableEditable) {
+        cell.userInteractionEnabled = NO;
+    }
     return cell;
 }
 
@@ -314,8 +356,31 @@
 //mark cell as selected.  disable cells.  for player selected, update strikes.  check if player is dead?  update status label.  update self.sortedPlayers and the singleton instance of match.
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
-        
+    //make table uneditable by setting bool property that is later checked in cellForRowAtIndexPath.  also must reload table.
+    self.isTableEditable = NO;
+    [self.playersToKill reloadData];
+    //add strikes to selected player equal to current player's votes
+    NSString *selectedPlayerID = [self.playerOrder objectAtIndex:[indexPath row]];
+    NSMutableDictionary *selectedPlayer = [self getPlayerInfoOutOfMatchData:selectedPlayerID];
+    NSNumber *newStrikesForSelectedPlayer = [NSNumber numberWithInt:[[selectedPlayer objectForKey:@"strikes"] intValue] + [self.votes intValue]];
+    [selectedPlayer setObject:newStrikesForSelectedPlayer forKey:@"strikes"];
+    
+    //repackage data
+    NSData *data = [self putPlayerInfoIntoMatchData:selectedPlayer withPlayerID:selectedPlayerID];
+    
+    //pass control to the next player in playerOrder
+    GKTurnBasedParticipant *nextParticipant = [self findNextParticipant]; 
+    [self.currentMatch endTurnWithNextParticipant:nextParticipant matchData:data completionHandler:^(NSError *error) {
+        if (error) {
+            NSLog(@"%@", error);
+            statusLabel.text = @"Oh God Damn It.  You Broke the Game.";
+        } else {
+            self.playersToKill.hidden = NO;
+            self.playersToKill.alpha = 0.2;
+            statusLabel.text = [NSString stringWithFormat:@"Awesome.  Good choice, %@.  Nobody really likes %@ anyway.", self.name, [selectedPlayer objectForKey:@"name"]];
+            [self.playersToKill reloadData];
+        }
+    }];
 }
 @end
 

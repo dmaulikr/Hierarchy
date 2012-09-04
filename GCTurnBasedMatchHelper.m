@@ -145,7 +145,7 @@ static GCTurnBasedMatchHelper *sharedHelper = nil;
     self.currentMatch = match;
     GKTurnBasedParticipant *firstParticipant =
     [match.participants objectAtIndex:0];
-    if (match.currentParticipant.lastTurnDate == NULL) {
+    if (match.currentParticipant.lastTurnDate == NULL && [match.currentParticipant.playerID isEqualToString:[GKLocalPlayer localPlayer].playerID]) {
         [delegate firstRound];
     }else {
         if (firstParticipant.lastTurnDate == NULL) {
@@ -229,11 +229,21 @@ static GCTurnBasedMatchHelper *sharedHelper = nil;
              isEqualToString:[GKLocalPlayer localPlayer].playerID]) {
             // it's the current match and it's our turn now
             self.currentMatch = match;
-            [delegate takeTurn:match];
+            if (match.currentParticipant.lastTurnDate == NULL)
+            {
+                [delegate firstRound];
+            } else {
+                [delegate takeTurn:match];
+            }
         } else {
             // it's the current match, but it's someone else's turn
             self.currentMatch = match;
-            [delegate layoutMatch:match];
+            if ([[match.participants objectAtIndex:[match.participants count]-1] lastTurnDate] == NULL)
+            {
+                [delegate layoutMatchFirstRound:match];
+            } else {
+                [delegate layoutMatch:match];
+            }
         }
     } else {
         if ([match.currentParticipant.playerID

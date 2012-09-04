@@ -12,6 +12,7 @@
 @protocol GCTurnBasedMatchHelperDelegate
 - (void)enterNewGame:(GKTurnBasedMatch *)match;
 - (void)layoutMatch:(GKTurnBasedMatch *)match;
+- (void)layoutMatchFirstRound:(GKTurnBasedMatch *)match;
 - (void)takeTurn:(GKTurnBasedMatch *)match;
 - (void)recieveEndGame:(GKTurnBasedMatch *)match;
 - (void)sendNotice:(NSString *)notice
